@@ -1,4 +1,5 @@
 // https://behringerwiki.musictribe.com/index.php?title=Channel_(/ch)_data
+#include <iostream>
 #include <iomanip>
 #include <sstream>
 #include "imgui.h"
@@ -84,7 +85,7 @@ void Channels::detail()
         state->address->send(s.str(), "f", channel.gain);
       }
 
-      static bool inverted = channel.invert != 1;
+      bool inverted = channel.invert != 1;
       if (inverted)
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
@@ -98,7 +99,7 @@ void Channels::detail()
       }
       if (inverted) { ImGui::PopStyleColor(); }
 
-      static bool phantomed = channel.phantom != 1;
+      bool phantomed = channel.phantom != 1;
       if (phantomed)
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));

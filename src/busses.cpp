@@ -35,7 +35,7 @@ void Busses::draw()
           state->address->send(s.str(), "f", bus);
         }
 
-        static bool muted = bus.mute != 0;
+        bool muted = bus.mute != 0;
         if (muted)
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
@@ -49,7 +49,7 @@ void Busses::draw()
         }
         if (muted) { ImGui::PopStyleColor(); }
 
-        static bool soloed = bus.solo != 1;
+        bool soloed = bus.solo != 1;
         if (soloed)
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));

@@ -33,7 +33,7 @@ void FX::draw()
           state->address->send(s.str(), "f", fx.fader);
         }
 
-        static bool muted = fx.mute != 0;
+        bool muted = fx.mute != 0;
         if (muted)
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
@@ -47,7 +47,7 @@ void FX::draw()
         }
         if (muted) { ImGui::PopStyleColor(); }
 
-        static bool soloed = fx.solo != 1;
+        bool soloed = fx.solo != 1;
         if (soloed)
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));

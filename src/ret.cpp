@@ -33,7 +33,7 @@ void Ret::draw()
           state->address->send(s.str(), "f", ret);
         }
 
-        static bool muted = ret.mute != 0;
+        bool muted = ret.mute != 0;
         if (muted)
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
@@ -47,7 +47,7 @@ void Ret::draw()
         }
         if (muted) { ImGui::PopStyleColor(); }
 
-        static bool soloed = ret.solo != 1;
+        bool soloed = ret.solo != 1;
         if (soloed)
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
