@@ -57,4 +57,4 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/imgu
 add_executable(maomix ${SRCS} ${IMGUI_SRCS} ${MY_HEADERS})
 target_link_libraries(maomix ${MY_LIBRARIES})
 target_link_directories(maomix PUBLIC ${MY_LIBRARY_DIRS})
-install(TARGETS maomix)
+install(TARGETS maomix RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
