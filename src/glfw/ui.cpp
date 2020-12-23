@@ -68,7 +68,7 @@ GLFW::GLFW()
 #endif
 
   // Create window with graphics context
-  window = glfwCreateWindow(1280, 720, app->title.data(), NULL, NULL);
+  window = glfwCreateWindow(1280, 720, App::title.data(), nullptr, nullptr);
   if (window == nullptr) { exit(1); }
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1); // Enable vsync

@@ -10,8 +10,6 @@
 using namespace maomix;
 
 
-
-
 void Busses::draw()
 {
   int id = 1;
