@@ -1,4 +1,4 @@
-# MixerOSCpp
+# Maolan OSC Mixer
 
 ## Building
 
@@ -8,7 +8,7 @@ mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Debug -DGLFW=On
 make
-./mixeroscpp
+./maomix
 ```
 
 ## Requirements
