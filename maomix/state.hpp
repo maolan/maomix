@@ -9,6 +9,63 @@ class ImVec4;
 
 namespace maomix
 {
+  class ChannelState
+  {
+    public:
+      float fader;
+      float gain;
+      int mute;
+      int solo;
+      int invert;
+      int phantom;
+  };
+
+
+  class BusState
+  {
+    public:
+      float fader;
+      int mute;
+      int solo;
+  };
+
+
+  class FXState
+  {
+    public:
+      float fader;
+      int mute;
+      int solo;
+  };
+
+
+  class ReturnState
+  {
+    public:
+      float fader;
+      int mute;
+      int solo;
+  };
+
+
+  class LineState
+  {
+    public:
+      float fader;
+      int mute;
+      int solo;
+  };
+
+
+  class MainState
+  {
+    public:
+      float fader;
+      int mute;
+      int solo;
+  };
+
+
   class State
   {
     public:
@@ -21,26 +78,13 @@ namespace maomix
       lo::Address *address;
       char ip[16];
       int port;
-      std::vector<float> busses;
-      std::vector<float> channels;
-      std::vector<float> fx;
-      std::vector<float> gain;
-      std::vector<float> ret;
-      std::vector<int> mute;
-      std::vector<int> solo;
-      std::vector<int> invert;
-      std::vector<int> phantom;
-      std::vector<int> busmute;
-      std::vector<int> bussolo;
-      std::vector<int> fxmute;
-      std::vector<int> fxsolo;
-      std::vector<int> retmute;
-      std::vector<int> retsolo;
-      float output;
-      int muted;
-      float line;
-      int linemuted;
-      int linesolo;
+
+      std::vector<BusState> busses;
+      std::vector<ChannelState> channels;
+      std::vector<FXState> fx;
+      std::vector<ReturnState> ret;
+      MainState output;
+      LineState line;
 
     protected:
       State();

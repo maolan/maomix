@@ -32,30 +32,15 @@ State * State::get()
 
 void State::init(const std::string &host, const unsigned &port)
 {
+  auto a = new lo::Address(host, port);
   int ch = 16;
   int busnumber = 6;
   int fxnumber = 4;
   int retnumber = 4;
 
   channels.resize(ch);
-  mute.resize(ch);
-  solo.resize(ch);
-  gain.resize(ch);
-  invert.resize(ch);
-  phantom.resize(ch);
-
   busses.resize(busnumber);
-  busmute.resize(busnumber);
-  bussolo.resize(busnumber);
-
   fx.resize(fxnumber);
-  fxmute.resize(fxnumber);
-  fxsolo.resize(fxnumber);
-
   ret.resize(retnumber);
-  retmute.resize(retnumber);
-  retsolo.resize(retnumber);
-
-  auto a = new lo::Address(host, port);
   address = a;
 }
