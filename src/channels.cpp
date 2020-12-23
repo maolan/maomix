@@ -28,51 +28,56 @@ void Channels::detail()
 {
   ImGui::Begin("Channels");
   {
-    std::stringstream s;
-    s << _detail;
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-    if (ImGui::Button(s.str().data(), ImVec2(30, 18))) { _detail = 0; }
-    ImGui::PopStyleColor();
-
-    auto &fader = state->channels[_detail];
-    if (ImGui::VSliderFloat("##v", ImVec2(30, 160), &fader, 0.0f, 1.0f, "%.2f"))
+    ImGui::BeginGroup();
     {
       std::stringstream s;
-      s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
-      state->address->send(s.str(), "f", fader);
-    }
-
-    auto &mute = state->mute[_detail - 1];
-    muted = mute != 0;
-    if (muted)
-    {
+      s << _detail;
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-    }
-    if (ImGui::Button("M", ImVec2(30, 18)))
-    {
-      std::stringstream s;
-      s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/mix/on";
-      mute = 1 - mute;
-      state->address->send(s.str(), "i", mute);
-    }
-    if (muted) { ImGui::PopStyleColor(); }
+      if (ImGui::Button(s.str().data(), ImVec2(30, 18))) { _detail = 0; }
+      ImGui::PopStyleColor();
 
-    auto &solo = state->solo[_detail - 1];
-    soloed = solo != 1;
-    if (soloed)
-    {
-      ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
+      auto &fader = state->channels[_detail];
+      if (ImGui::VSliderFloat("##v", ImVec2(30, 160), &fader, 0.0f, 1.0f, "%.2f"))
+      {
+        std::stringstream s;
+        s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
+        state->address->send(s.str(), "f", fader);
+      }
+
+      auto &mute = state->mute[_detail - 1];
+      muted = mute != 0;
+      if (muted)
+      {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
+      }
+      if (ImGui::Button("M", ImVec2(30, 18)))
+      {
+        std::stringstream s;
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/mix/on";
+        mute = 1 - mute;
+        state->address->send(s.str(), "i", mute);
+      }
+      if (muted) { ImGui::PopStyleColor(); }
+
+      auto &solo = state->solo[_detail - 1];
+      soloed = solo != 1;
+      if (soloed)
+      {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
+      }
+      if (ImGui::Button("S", ImVec2(30, 18)))
+      {
+        std::stringstream s;
+        s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << _detail;
+        solo = 1 - solo;
+        state->address->send(s.str(), "i", solo);
+      }
+      if (soloed) { ImGui::PopStyleColor(); }
     }
-    if (ImGui::Button("S", ImVec2(30, 18)))
-    {
-      std::stringstream s;
-      s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << _detail;
-      solo = 1 - solo;
-      state->address->send(s.str(), "i", solo);
-    }
-    if (soloed) { ImGui::PopStyleColor(); }
+    ImGui::EndGroup();
+
     auto &gain = state->gain[_detail -1];
-    ImGui::SetCursorPos(ImVec2(50, 25));
+    ImGui::SameLine();
     ImGui::BeginGroup();
     {
       if (Knob(&gain, 0.0f, 1.0f))
@@ -105,8 +110,8 @@ void Channels::detail()
       }
       if (ImGui::Button("48V", ImVec2(30, 18)))
       {
-        std::stringstream s;
-        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
+        // std::stringstream s;
+        // s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
         phantom = 1 - phantom;
         // state->address->send(s.str(), "i", invert);
       }
