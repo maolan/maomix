@@ -1,5 +1,4 @@
 // https://behringerwiki.musictribe.com/index.php?title=Channel_(/ch)_data
-#include <iostream>
 #include <iomanip>
 #include <sstream>
 #include "imgui.h"
@@ -78,7 +77,7 @@ void Channels::detail()
     ImGui::SameLine();
     ImGui::BeginGroup();
     {
-      if (Knob(&(channel.gain), 0.0f, 1.0f))
+      if (Knob("gain", &(channel.gain), 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
@@ -116,6 +115,32 @@ void Channels::detail()
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
       ImGui::Button("lnk", ImVec2(30, 18));
       ImGui::PopStyleColor();
+    }
+    ImGui::EndGroup();
+
+    ImGui::SameLine();
+    ImGui::BeginGroup();
+    {
+      bool gated = channel.gate.on != 1;
+      if (gated)
+      {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
+      }
+      if (ImGui::Button("Gate", ImVec2(35, 18)))
+      {
+        std::stringstream s;
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
+        channel.gate.on = 1 - channel.gate.on;
+        // state->address->send(s.str(), "i", channel.gate.on);
+      }
+      if (gated) { ImGui::PopStyleColor(); }
+
+      if (Knob("Gate", &(channel.gate.fader), 0.0f, 1.0f))
+      {
+        std::stringstream s;
+        s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
+        // state->address->send(s.str(), "f", channel.gate.fader);
+      }
     }
     ImGui::EndGroup();
   }

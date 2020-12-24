@@ -9,6 +9,14 @@ class ImVec4;
 
 namespace maomix
 {
+  class GateState
+  {
+    public:
+      float fader;
+      int on;
+  };
+
+
   class ChannelState
   {
     public:
@@ -18,6 +26,7 @@ namespace maomix
       int solo;
       int invert;
       int phantom;
+      GateState gate;
   };
 
 
