@@ -138,16 +138,16 @@ void Channels::detail()
       if (ImGui::Button("Gate", ImVec2(35, 18)))
       {
         std::stringstream s;
-        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/gate/on";
         channel.gate.on = 1 - channel.gate.on;
-        // state->address->send(s.str(), "i", channel.gate.on);
+        state->address->send(s.str(), "i", channel.gate.on);
       }
       if (gated) { ImGui::PopStyleColor(); }
       if (Knob("Gate", &(channel.gate.fader), 0.0f, 1.0f))
       {
         std::stringstream s;
-        s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
-        // state->address->send(s.str(), "f", channel.gate.fader);
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/gate/thr";
+        state->address->send(s.str(), "f", channel.gate.fader);
       }
 
       bool dyned = channel.dyn.on != 1;
@@ -158,16 +158,16 @@ void Channels::detail()
       if (ImGui::Button("dyn", ImVec2(35, 18)))
       {
         std::stringstream s;
-        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/dyn/on";
         channel.dyn.on = 1 - channel.dyn.on;
-        // state->address->send(s.str(), "i", channel.dyn.on);
+        state->address->send(s.str(), "i", channel.dyn.on);
       }
       if (dyned) { ImGui::PopStyleColor(); }
       if (Knob("dyn", &(channel.dyn.fader), 0.0f, 1.0f))
       {
         std::stringstream s;
-        s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
-        // state->address->send(s.str(), "f", channel.dyn.fader);
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/dyn/thr";
+        state->address->send(s.str(), "f", channel.dyn.fader);
       }
     }
     ImGui::EndGroup();
