@@ -7,7 +7,7 @@
 
 static float ANGLE_MIN = 3.141592 * 0.75;
 static float ANGLE_MAX = 3.141592 * 2.25;
-static float radius_outer = 15.0;
+static float radius_outer = 18.0;
 
 
 bool Knob(const char *label, float* p_value, float v_min, float v_max)

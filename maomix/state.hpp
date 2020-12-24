@@ -9,6 +9,14 @@ class ImVec4;
 
 namespace maomix
 {
+  class DynState
+  {
+    public:
+      float fader;
+      int on;
+  };
+
+
   class GateState
   {
     public:
@@ -27,6 +35,7 @@ namespace maomix
       int invert;
       int phantom;
       GateState gate;
+      DynState dyn;
   };
 
 

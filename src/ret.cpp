@@ -23,10 +23,10 @@ void Ret::draw()
         std::stringstream s;
         s << id;
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-        ImGui::Button(s.str().data(), ImVec2(30, 18));
+        ImGui::Button(s.str().data(), ImVec2(35, 18));
         ImGui::PopStyleColor();
 
-        if (ImGui::VSliderFloat("", ImVec2(30, 160), &(ret.fader), 0.0f, 1.0f, "%.2f"))
+        if (ImGui::VSliderFloat("", ImVec2(35, 160), &(ret.fader), 0.0f, 1.0f, "%.2f"))
         {
           std::stringstream s;
           s << "/fxrtn/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
@@ -38,7 +38,7 @@ void Ret::draw()
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         }
-        if (ImGui::Button("M", ImVec2(30, 18)))
+        if (ImGui::Button("M", ImVec2(35, 18)))
         {
           std::stringstream s;
           s << "/fxrtn/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
@@ -52,7 +52,7 @@ void Ret::draw()
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         }
-        if (ImGui::Button("S", ImVec2(30, 18)))
+        if (ImGui::Button("S", ImVec2(35, 18)))
         {
           std::stringstream s;
           s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id + 17;

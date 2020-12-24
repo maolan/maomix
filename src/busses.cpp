@@ -26,7 +26,7 @@ void Busses::draw()
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         ImGui::Button(s.str().data(), ImVec2(30, 18));
         ImGui::PopStyleColor();
-        if (ImGui::VSliderFloat("", ImVec2(30, 160), &(bus.fader), 0.0f, 1.0f, "%.2f"))
+        if (ImGui::VSliderFloat("", ImVec2(35, 160), &(bus.fader), 0.0f, 1.0f, "%.2f"))
         {
           std::stringstream s;
           s << "/bus/" << id << "/mix/fader";

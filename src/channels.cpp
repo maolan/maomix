@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "maomix/channels.hpp"
 #include "maomix/knob.hpp"
 #include "maomix/state.hpp"
@@ -34,10 +35,10 @@ void Channels::detail()
       s << _detail;
 
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-      if (ImGui::Button(s.str().data(), ImVec2(30, 18))) { _detail = 0; }
+      if (ImGui::Button(s.str().data(), ImVec2(35, 18))) { _detail = 0; }
       ImGui::PopStyleColor();
 
-      if (ImGui::VSliderFloat("##v", ImVec2(30, 160), &(channel.fader), 0.0f, 1.0f, "%.2f"))
+      if (ImGui::VSliderFloat("##v", ImVec2(35, 160), &(channel.fader), 0.0f, 1.0f, "%.2f"))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/mix/fader";
@@ -49,7 +50,7 @@ void Channels::detail()
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
       }
-      if (ImGui::Button("M", ImVec2(30, 18)))
+      if (ImGui::Button("M", ImVec2(35, 18)))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/mix/on";
@@ -63,7 +64,7 @@ void Channels::detail()
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
       }
-      if (ImGui::Button("S", ImVec2(30, 18)))
+      if (ImGui::Button("S", ImVec2(35, 18)))
       {
         std::stringstream s;
         s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << _detail;
@@ -75,8 +76,13 @@ void Channels::detail()
     ImGui::EndGroup();
 
     ImGui::SameLine();
+    ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+    ImGui::SameLine();
+
+    ImGui::SameLine();
     ImGui::BeginGroup();
     {
+      ImGui::Button("Gain", ImVec2(35, 18));
       if (Knob("gain", &(channel.gain), 0.0f, 1.0f))
       {
         std::stringstream s;
@@ -89,7 +95,7 @@ void Channels::detail()
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
       }
-      if (ImGui::Button("inv", ImVec2(30, 18)))
+      if (ImGui::Button("inv", ImVec2(35, 18)))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
@@ -103,7 +109,7 @@ void Channels::detail()
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
       }
-      if (ImGui::Button("48V", ImVec2(30, 18)))
+      if (ImGui::Button("48V", ImVec2(35, 18)))
       {
         // std::stringstream s;
         // s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
@@ -113,12 +119,15 @@ void Channels::detail()
       if (phantomed) { ImGui::PopStyleColor(); }
 
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-      ImGui::Button("lnk", ImVec2(30, 18));
+      ImGui::Button("lnk", ImVec2(35, 18));
       ImGui::PopStyleColor();
     }
     ImGui::EndGroup();
 
     ImGui::SameLine();
+    ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+    ImGui::SameLine();
+
     ImGui::BeginGroup();
     {
       bool gated = channel.gate.on != 1;
@@ -134,12 +143,31 @@ void Channels::detail()
         // state->address->send(s.str(), "i", channel.gate.on);
       }
       if (gated) { ImGui::PopStyleColor(); }
-
       if (Knob("Gate", &(channel.gate.fader), 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
         // state->address->send(s.str(), "f", channel.gate.fader);
+      }
+
+      bool dyned = channel.dyn.on != 1;
+      if (dyned)
+      {
+        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
+      }
+      if (ImGui::Button("dyn", ImVec2(35, 18)))
+      {
+        std::stringstream s;
+        s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
+        channel.dyn.on = 1 - channel.dyn.on;
+        // state->address->send(s.str(), "i", channel.dyn.on);
+      }
+      if (dyned) { ImGui::PopStyleColor(); }
+      if (Knob("dyn", &(channel.dyn.fader), 0.0f, 1.0f))
+      {
+        std::stringstream s;
+        s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
+        // state->address->send(s.str(), "f", channel.dyn.fader);
       }
     }
     ImGui::EndGroup();
@@ -161,10 +189,10 @@ void Channels::list()
         std::stringstream s;
         s << id;
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-        if (ImGui::Button(s.str().data(), ImVec2(30, 18))) { _detail = id; }
+        if (ImGui::Button(s.str().data(), ImVec2(35, 18))) { _detail = id; }
         ImGui::PopStyleColor();
 
-        if (ImGui::VSliderFloat("", ImVec2(30, 160), &(channel.fader), 0.0f, 1.0f, "%.2f"))
+        if (ImGui::VSliderFloat("", ImVec2(35, 160), &(channel.fader), 0.0f, 1.0f, "%.2f"))
         {
           std::stringstream s;
           s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
@@ -176,7 +204,7 @@ void Channels::list()
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         }
-        if (ImGui::Button("M", ImVec2(30, 18)))
+        if (ImGui::Button("M", ImVec2(35, 18)))
         {
           std::stringstream s;
           s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
@@ -190,7 +218,7 @@ void Channels::list()
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         }
-        if (ImGui::Button("S", ImVec2(30, 18)))
+        if (ImGui::Button("S", ImVec2(35, 18)))
         {
           std::stringstream s;
           s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id;
