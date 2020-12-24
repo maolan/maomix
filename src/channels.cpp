@@ -27,6 +27,7 @@ void Channels::draw()
 void Channels::detail()
 {
   auto &channel = state->channels[_detail];
+  const auto client = state->connection->client;
   ImGui::Begin("Channels");
   {
     ImGui::BeginGroup();
@@ -42,7 +43,7 @@ void Channels::detail()
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/mix/fader";
-        state->address->send(s.str(), "f", channel.fader);
+        client->send(s.str(), "f", channel.fader);
       }
 
       muted = channel.mute != 0;
@@ -55,7 +56,7 @@ void Channels::detail()
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/mix/on";
         channel.mute = 1 - channel.mute;
-        state->address->send(s.str(), "i", channel.mute);
+        client->send(s.str(), "i", channel.mute);
       }
       if (muted) { ImGui::PopStyleColor(); }
 
@@ -69,7 +70,7 @@ void Channels::detail()
         std::stringstream s;
         s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << _detail;
         channel.solo = 1 - channel.solo;
-        state->address->send(s.str(), "i", channel.solo);
+        client->send(s.str(), "i", channel.solo);
       }
       if (soloed) { ImGui::PopStyleColor(); }
     }
@@ -87,7 +88,7 @@ void Channels::detail()
       {
         std::stringstream s;
         s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
-        state->address->send(s.str(), "f", channel.gain);
+        client->send(s.str(), "f", channel.gain);
       }
 
       bool inverted = channel.invert != 1;
@@ -100,7 +101,7 @@ void Channels::detail()
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
         channel.invert = 1 - channel.invert;
-        state->address->send(s.str(), "i", channel.invert);
+        client->send(s.str(), "i", channel.invert);
       }
       if (inverted) { ImGui::PopStyleColor(); }
 
@@ -114,7 +115,7 @@ void Channels::detail()
         // std::stringstream s;
         // s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/preamp/invert";
         channel.phantom = 1 - channel.phantom;
-        // state->address->send(s.str(), "i", invert);
+        // client->send(s.str(), "i", invert);
       }
       if (phantomed) { ImGui::PopStyleColor(); }
 
@@ -140,14 +141,14 @@ void Channels::detail()
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/gate/on";
         channel.gate.on = 1 - channel.gate.on;
-        state->address->send(s.str(), "i", channel.gate.on);
+        client->send(s.str(), "i", channel.gate.on);
       }
       if (gated) { ImGui::PopStyleColor(); }
       if (Knob("Gate", &(channel.gate.fader), 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/gate/thr";
-        state->address->send(s.str(), "f", channel.gate.fader);
+        client->send(s.str(), "f", channel.gate.fader);
       }
 
       bool dyned = channel.dyn.on != 1;
@@ -160,14 +161,14 @@ void Channels::detail()
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/dyn/on";
         channel.dyn.on = 1 - channel.dyn.on;
-        state->address->send(s.str(), "i", channel.dyn.on);
+        client->send(s.str(), "i", channel.dyn.on);
       }
       if (dyned) { ImGui::PopStyleColor(); }
       if (Knob("dyn", &(channel.dyn.fader), 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/dyn/thr";
-        state->address->send(s.str(), "f", channel.dyn.fader);
+        client->send(s.str(), "f", channel.dyn.fader);
       }
     }
     ImGui::EndGroup();
@@ -179,6 +180,7 @@ void Channels::detail()
 void Channels::list()
 {
   int id = 1;
+  const auto client = state->connection->client;
   ImGui::Begin("Channels");
   {
     for (auto &channel : state->channels)
@@ -196,7 +198,7 @@ void Channels::list()
         {
           std::stringstream s;
           s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
-          state->address->send(s.str(), "f", channel.fader);
+          client->send(s.str(), "f", channel.fader);
         }
 
         muted = channel.mute != 0;
@@ -209,7 +211,7 @@ void Channels::list()
           std::stringstream s;
           s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
           channel.mute = 1 - channel.mute;
-          state->address->send(s.str(), "i", channel.mute);
+          client->send(s.str(), "i", channel.mute);
         }
         if (muted) { ImGui::PopStyleColor(); }
 
@@ -223,7 +225,7 @@ void Channels::list()
           std::stringstream s;
           s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id;
           channel.solo = 1 - channel.solo;
-          state->address->send(s.str(), "i", channel.solo);
+          client->send(s.str(), "i", channel.solo);
         }
         if (soloed) { ImGui::PopStyleColor(); }
       }

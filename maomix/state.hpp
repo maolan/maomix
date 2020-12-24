@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 #include <lo/lo_cpp.h>
+#include "./connection.hpp"
 
 
 class ImVec4;
@@ -90,10 +91,10 @@ namespace maomix
       ~State();
       static State * get();
 
-      void init(const std::string &host, const unsigned &port);
+      void init(const std::string &host, const int &port);
 
       ImVec4 *clear_color;
-      lo::Address *address;
+      Connection *connection;
       char ip[16];
       int port;
 

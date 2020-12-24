@@ -9,8 +9,7 @@ State * State::state = nullptr;
 
 
 State::State()
-  : address{nullptr}
-  , port{10024}
+  : connection{nullptr}
 {
   clear_color = new ImVec4;
 }
@@ -18,7 +17,7 @@ State::State()
 
 State::~State()
 {
-  if (address) { delete address; }
+  if (connection) { delete connection; }
 }
 
 
@@ -30,9 +29,9 @@ State * State::get()
 }
 
 
-void State::init(const std::string &host, const unsigned &port)
+void State::init(const std::string &host, const int &port)
 {
-  auto a = new lo::Address(host, port);
+  auto c = new Connection(host, port);
   int ch = 16;
   int busnumber = 6;
   int fxnumber = 4;
@@ -42,5 +41,5 @@ void State::init(const std::string &host, const unsigned &port)
   busses.resize(busnumber);
   fx.resize(fxnumber);
   ret.resize(retnumber);
-  address = a;
+  connection = c;
 }

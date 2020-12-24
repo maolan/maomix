@@ -10,12 +10,13 @@ using namespace maomix;
 void Main::draw()
 {
   const auto state = State::get();
+  const auto client = state->connection->client;
   bool muted;
   ImGui::Begin("Main");
   {
     if (ImGui::VSliderFloat("", ImVec2(35, 160), &(state->output.fader), 0.0f, 1.0f, "%.2f"))
     {
-      state->address->send("/lr/mix/fader", "f", state->output);
+      client->send("/lr/mix/fader", "f", state->output);
     }
     muted = state->output.mute != 0;
     if (muted)
@@ -25,7 +26,7 @@ void Main::draw()
     if (ImGui::Button("M", ImVec2(35, 18)))
     {
       state->output.mute = 1 - state->output.mute;
-      state->address->send("/lr/mix/on", "i", state->output.mute);
+      client->send("/lr/mix/on", "i", state->output.mute);
     }
     if (muted) { ImGui::PopStyleColor(); }
   }

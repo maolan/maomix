@@ -14,6 +14,7 @@ void Busses::draw()
 {
   int id = 1;
   const auto state = State::get();
+  const auto client = state->connection->client;
   ImGui::Begin("Busses");
   {
     for (auto &bus : state->busses)
@@ -30,7 +31,7 @@ void Busses::draw()
         {
           std::stringstream s;
           s << "/bus/" << id << "/mix/fader";
-          state->address->send(s.str(), "f", bus);
+          client->send(s.str(), "f", bus);
         }
 
         bool muted = bus.mute != 0;
@@ -43,7 +44,7 @@ void Busses::draw()
           std::stringstream s;
           s << "/bus/" << id << "/mix/on";
           bus.mute = 1 - bus.mute;
-          state->address->send(s.str(), "i", bus.mute);
+          client->send(s.str(), "i", bus.mute);
         }
         if (muted) { ImGui::PopStyleColor(); }
 
@@ -57,7 +58,7 @@ void Busses::draw()
           std::stringstream s;
           s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id + 39;
           bus.solo = 1 - bus.solo;
-          state->address->send(s.str(), "i", bus.solo);
+          client->send(s.str(), "i", bus.solo);
         }
         if (soloed) { ImGui::PopStyleColor(); }
       }

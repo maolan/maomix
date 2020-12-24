@@ -8,18 +8,17 @@ using namespace maomix;
 
 
 static const auto state = State::get();
+static char ip[16];
+static int port = 10024;
 
 
 void Discovery::draw()
 {
   ImGui::Begin("Discovery");
   {
-    ImGui::InputText("IP", state->ip, 16);
-    ImGui::InputInt("Port", &(state->port));
-    if (ImGui::Button("OK"))
-    {
-      state->init(state->ip, state->port);
-    }
+    ImGui::InputText("IP", ip, 16);
+    ImGui::InputInt("Port", &port);
+    if (ImGui::Button("OK")) { state->init(ip, port); }
   }
   ImGui::End();
 }

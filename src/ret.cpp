@@ -13,6 +13,7 @@ void Ret::draw()
 {
   int id = 1;
   const auto state = State::get();
+  const auto client = state->connection->client;
   ImGui::Begin("Ret");
   {
     for (auto &ret : state->ret)
@@ -30,7 +31,7 @@ void Ret::draw()
         {
           std::stringstream s;
           s << "/fxrtn/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
-          state->address->send(s.str(), "f", ret);
+          client->send(s.str(), "f", ret);
         }
 
         bool muted = ret.mute != 0;
@@ -43,7 +44,7 @@ void Ret::draw()
           std::stringstream s;
           s << "/fxrtn/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
           ret.mute = 1 - ret.mute;
-          state->address->send(s.str(), "i", ret.mute);
+          client->send(s.str(), "i", ret.mute);
         }
         if (muted) { ImGui::PopStyleColor(); }
 
@@ -57,7 +58,7 @@ void Ret::draw()
           std::stringstream s;
           s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id + 17;
           ret.solo = 1 - ret.solo;
-          state->address->send(s.str(), "i", ret.solo);
+          client->send(s.str(), "i", ret.solo);
         }
         if (soloed) { ImGui::PopStyleColor(); }
       }

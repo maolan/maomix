@@ -12,7 +12,7 @@ const std::string App::title = "MaoMix";
 void App::draw()
 {
   static auto state = State::get();
-  if (state->address)
+  if (state->connection)
   {
     busses.draw();
     fx.draw();

@@ -10,13 +10,14 @@ using namespace maomix;
 void Line::draw()
 {
   const auto state = State::get();
+  const auto client = state->connection->client;
   bool muted;
   bool soloed;
   ImGui::Begin("Line");
   {
     if (ImGui::VSliderFloat("", ImVec2(35, 160), &(state->line.fader), 0.0f, 1.0f, "%.2f"))
     {
-      state->address->send("/rtn/aux/mix/fader", "f", state->line);
+      client->send("/rtn/aux/mix/fader", "f", state->line);
     }
 
     muted = state->line.mute != 0;
@@ -27,7 +28,7 @@ void Line::draw()
     if (ImGui::Button("M", ImVec2(35, 18)))
     {
       state->line.mute = 1 - state->line.mute;
-      state->address->send("/rtn/aux/mix/on", "i", state->line.mute);
+      client->send("/rtn/aux/mix/on", "i", state->line.mute);
     }
     if (muted) { ImGui::PopStyleColor(); }
 
@@ -39,7 +40,7 @@ void Line::draw()
     if (ImGui::Button("S", ImVec2(35, 18)))
     {
       state->line.solo = 1 - state->line.solo;
-      state->address->send("/-stat/solosw/17", "i", state->line.solo);
+      client->send("/-stat/solosw/17", "i", state->line.solo);
     }
     if (soloed) { ImGui::PopStyleColor(); }
   }
