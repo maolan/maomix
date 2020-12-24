@@ -14,7 +14,7 @@ void Main::draw()
   bool muted;
   ImGui::Begin("Main");
   {
-    if (ImGui::VSliderFloat("", ImVec2(35, 160), &(state->output.fader), 0.0f, 1.0f, "%.2f"))
+    if (ImGui::VSliderFloat("", state->size.slider, &(state->output.fader), 0.0f, 1.0f, "%.2f"))
     {
       client->send("/lr/mix/fader", "f", state->output);
     }
@@ -23,7 +23,7 @@ void Main::draw()
     {
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
     }
-    if (ImGui::Button("M", ImVec2(35, 18)))
+    if (ImGui::Button("M", state->size.button))
     {
       state->output.mute = 1 - state->output.mute;
       client->send("/lr/mix/on", "i", state->output.mute);

@@ -15,7 +15,7 @@ void Line::draw()
   bool soloed;
   ImGui::Begin("Line");
   {
-    if (ImGui::VSliderFloat("", ImVec2(35, 160), &(state->line.fader), 0.0f, 1.0f, "%.2f"))
+    if (ImGui::VSliderFloat("", state->size.slider, &(state->line.fader), 0.0f, 1.0f, "%.2f"))
     {
       client->send("/rtn/aux/mix/fader", "f", state->line);
     }
@@ -25,7 +25,7 @@ void Line::draw()
     {
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
     }
-    if (ImGui::Button("M", ImVec2(35, 18)))
+    if (ImGui::Button("M", state->size.button))
     {
       state->line.mute = 1 - state->line.mute;
       client->send("/rtn/aux/mix/on", "i", state->line.mute);
@@ -37,7 +37,7 @@ void Line::draw()
     {
       ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
     }
-    if (ImGui::Button("S", ImVec2(35, 18)))
+    if (ImGui::Button("S", state->size.button))
     {
       state->line.solo = 1 - state->line.solo;
       client->send("/-stat/solosw/17", "i", state->line.solo);

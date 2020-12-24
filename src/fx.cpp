@@ -24,10 +24,10 @@ void FX::draw()
         std::stringstream s;
         s << id;
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
-        ImGui::Button(s.str().data(), ImVec2(35, 18));
+        ImGui::Button(s.str().data(), state->size.button);
         ImGui::PopStyleColor();
 
-        if (ImGui::VSliderFloat("", ImVec2(35, 160), &(fx.fader), 0.0f, 1.0f, "%.2f"))
+        if (ImGui::VSliderFloat("", state->size.slider, &(fx.fader), 0.0f, 1.0f, "%.2f"))
         {
           std::stringstream s;
           s << "/bus/" << std::setw(2) << std::setfill('0') << id << "/mix/mlevel";
@@ -39,7 +39,7 @@ void FX::draw()
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         }
-        if (ImGui::Button("M", ImVec2(35, 18)))
+        if (ImGui::Button("M", state->size.button))
         {
           std::stringstream s;
           s << "/bus/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
@@ -53,7 +53,7 @@ void FX::draw()
         {
           ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         }
-        if (ImGui::Button("S", ImVec2(35, 18)))
+        if (ImGui::Button("S", state->size.button))
         {
           std::stringstream s;
           s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id + 45;

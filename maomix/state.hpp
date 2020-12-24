@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include "imgui.h"
 #include <lo/lo_cpp.h>
 #include "./connection.hpp"
 
@@ -85,6 +86,16 @@ namespace maomix
   };
 
 
+  class Size
+  {
+    public:
+      Size();
+
+      ImVec2 slider;
+      ImVec2 button;
+  };
+
+
   class State
   {
     public:
@@ -104,6 +115,7 @@ namespace maomix
       std::vector<ReturnState> ret;
       MainState output;
       LineState line;
+      Size size;
 
     protected:
       State();
