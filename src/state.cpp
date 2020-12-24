@@ -8,6 +8,7 @@ using namespace maomix;
 Size::Size()
   : slider{35, 160}
   , button{35, 18}
+  , knob{18}
 {}
 
 
