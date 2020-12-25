@@ -83,7 +83,7 @@ void Channels::detail()
     ImGui::SameLine();
     ImGui::BeginGroup();
     {
-      ImGui::Button("Gain", state->size.button);
+      ImGui::Text("Gain");
       if (Knob("gain", state->size.knob, &(channel.gain), 0.0f, 1.0f))
       {
         std::stringstream s;
@@ -136,7 +136,7 @@ void Channels::detail()
       {
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
       }
-      if (ImGui::Button("Gate", state->size.button))
+      if (ImGui::Button("gate", state->size.button))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/gate/on";
@@ -170,6 +170,16 @@ void Channels::detail()
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/dyn/thr";
         client->send(s.str(), "f", channel.dyn.fader);
       }
+    }
+    ImGui::EndGroup();
+
+    ImGui::SameLine();
+    ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+    ImGui::SameLine();
+
+    ImGui::BeginGroup();
+    {
+      ImGui::Text("Send");
     }
     ImGui::EndGroup();
   }
