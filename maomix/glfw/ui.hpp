@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "../ui.hpp"
 
 
@@ -11,15 +12,14 @@ namespace maomix
   class GLFW : public UI
   {
     public:
-      GLFW();
+      GLFW(const std::string &title = "ImGui");
       ~GLFW();
 
       virtual void prepare();
       virtual void render();
-      virtual void run();
+      virtual void run(App *app);
 
     protected:
-      App *app;
       GLFWwindow *window;
   };
 }

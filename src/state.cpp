@@ -17,9 +17,7 @@ State * State::state = nullptr;
 
 State::State()
   : connection{nullptr}
-{
-  clear_color = new ImVec4;
-}
+{}
 
 
 State::~State()

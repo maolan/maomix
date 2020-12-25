@@ -105,7 +105,6 @@ namespace maomix
 
       void init(const std::string &host, const int &port);
 
-      ImVec4 *clear_color;
       Connection *connection;
       char ip[16];
       int port;

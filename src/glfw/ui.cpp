@@ -1,10 +1,11 @@
 #include <iostream>
+#include <string>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "maomix/glfw/ui.hpp"
 #include "maomix/app.hpp"
-#include "maomix/state.hpp"
+#include "maomix/glfw/ui.hpp"
+// #include "maomix/app.hpp"
 
 #if defined(IMGUI_IMPL_OPENGL_LOADER_GL3W)
 #include <GL/gl3w.h>            // Initialize with gl3wInit()
@@ -25,7 +26,7 @@ using namespace gl;
 #include <glbinding/gl/gl.h>
 using namespace gl;
 #else
-#include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
+// #include IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 
 #include <GLFW/glfw3.h>
@@ -44,7 +45,7 @@ static void glfw_error_callback(int error, const char *description)
 }
 
 
-GLFW::GLFW()
+GLFW::GLFW(const std::string &title)
 {
   // Setup window
   glfwSetErrorCallback(glfw_error_callback);
@@ -68,7 +69,7 @@ GLFW::GLFW()
 #endif
 
   // Create window with graphics context
-  window = glfwCreateWindow(1280, 720, App::title.data(), nullptr, nullptr);
+  window = glfwCreateWindow(1280, 720, title.data(), nullptr, nullptr);
   if (window == nullptr) { exit(1); }
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1); // Enable vsync
@@ -108,7 +109,6 @@ GLFW::GLFW()
   // Setup Platform/Renderer bindings
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
-  app = new App();
 }
 
 
@@ -125,17 +125,16 @@ void GLFW::render()
 {
   ImGui::Render();
   int display_w, display_h;
-  const auto &clear_color = State::get()->clear_color;
   glfwGetFramebufferSize(window, &display_w, &display_h);
   glViewport(0, 0, display_w, display_h);
-  glClearColor(clear_color->x, clear_color->y, clear_color->z, clear_color->w);
+  // glClearColor(clear_color->x, clear_color->y, clear_color->z, clear_color->w);
   glClear(GL_COLOR_BUFFER_BIT);
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   glfwSwapBuffers(window);
 }
 
 
-void GLFW::run()
+void GLFW::run(App *app)
 {
   while (!glfwWindowShouldClose(window))
   {
@@ -153,5 +152,4 @@ GLFW::~GLFW()
   ImGui::DestroyContext();
   glfwDestroyWindow(window);
   glfwTerminate();
-  delete app;
 }

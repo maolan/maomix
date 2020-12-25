@@ -1,4 +1,5 @@
 #include <iostream>
+#include "maomix/app.hpp"
 #include "maomix/glfw/ui.hpp"
 #include <lo/lo_cpp.h>
 
@@ -16,8 +17,9 @@ int main()
   // st.add_method(nullptr, nullptr, []{std::cout << "example" << std::endl;});
   // st.start();
 
-  maomix::UI *display = new maomix::GLFW();
-  display->run();
+  maomix::UI *display = new maomix::GLFW("MaoMix");
+  auto app = new maomix::App();
+  display->run(app);
   delete display;
   return 0;
 }

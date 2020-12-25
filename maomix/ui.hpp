@@ -3,6 +3,7 @@
 
 namespace maomix
 {
+  class App;
   class UI
   {
     public:
@@ -10,6 +11,6 @@ namespace maomix
 
       virtual void prepare() = 0;
       virtual void render() = 0;
-      virtual void run() = 0;
+      virtual void run(App *app) = 0;
   };
 }
