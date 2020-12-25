@@ -1,4 +1,5 @@
 // https://behringerwiki.musictribe.com/index.php?title=Channel_(/ch)_data
+#include <iostream>
 #include <iomanip>
 #include <sstream>
 #include "imgui.h"
@@ -180,8 +181,41 @@ void Channels::detail()
     ImGui::BeginGroup();
     {
       ImGui::Text("Send");
+      auto &channel = state->channels[_detail - 1];
+      int busnumber = 1;
+      for (auto &bus : channel.send)
+      {
+        std::stringstream s;
+        s << "Bus " << busnumber;
+        if (ImGui::SliderFloat(s.str().data(), &bus, 0.0f, 1.0f, "%.2f"))
+        {
+          std::stringstream s;
+          s << "/ch/" << std::setw(2) << std::setfill('0') << _detail;
+          s << "/mix/" << std::setw(2) << std::setfill('0') << busnumber << "/level";
+          client->send(s.str(), "f", bus);
+        }
+        ++busnumber;
+      }
+      int fxnumber = 1;
+      for (auto &fx : channel.fx)
+      {
+        std::stringstream s;
+        s << "FX " << fxnumber;
+        if (ImGui::SliderFloat(s.str().data(), &fx, 0.0f, 1.0f, "%.2f"))
+        {
+          std::stringstream s;
+          s << "/ch/" << std::setw(2) << std::setfill('0') << _detail;
+          s << "/mix/" << std::setw(2) << std::setfill('0') << fxnumber + busnumber - 1 << "/level";
+          std::cout << s.str() << " = " << fx << '\n';
+          client->send(s.str(), "f", fx);
+        }
+        ++fxnumber;
+      }
     }
     ImGui::EndGroup();
+
+    ImGui::SameLine();
+    ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
   }
   ImGui::End();
 }

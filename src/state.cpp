@@ -42,9 +42,15 @@ void State::init(const std::string &host, const int &port)
   int fxnumber = 4;
   int retnumber = 4;
 
-  channels.resize(ch);
   busses.resize(busnumber);
   fx.resize(fxnumber);
   ret.resize(retnumber);
+  channels.resize(ch);
+  for (auto &channel : channels)
+  {
+    channel.send.resize(busnumber);
+    channel.fx.resize(fxnumber);
+  }
+
   connection = c;
 }

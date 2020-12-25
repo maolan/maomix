@@ -38,6 +38,8 @@ namespace maomix
       int phantom;
       GateState gate;
       DynState dyn;
+      std::vector<float> send;
+      std::vector<float> fx;
   };
 
 
