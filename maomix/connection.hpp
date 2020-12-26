@@ -11,7 +11,7 @@ namespace maomix
       Connection(const lo::string_type &host, const lo::num_string_type &port);
       ~Connection();
 
+      lo::ServerThread server;
       lo::Address *client;
-      lo::ServerThread *server;
   };
 }

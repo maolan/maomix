@@ -36,21 +36,5 @@ State * State::get()
 
 void State::init(const std::string &host, const int &port)
 {
-  auto c = new Connection(host, port);
-  int ch = 16;
-  int busnumber = 6;
-  int fxnumber = 4;
-  int retnumber = 4;
-
-  busses.resize(busnumber);
-  fx.resize(fxnumber);
-  ret.resize(retnumber);
-  channels.resize(ch);
-  for (auto &channel : channels)
-  {
-    channel.send.resize(busnumber);
-    channel.fx.resize(fxnumber);
-  }
-
-  connection = c;
+  connection = new Connection(host, port);
 }
