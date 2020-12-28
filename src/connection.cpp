@@ -20,22 +20,8 @@ Connection::Connection(const lo::string_type &host, const lo::num_string_type &p
 
   server.add_method("/info", "ssss", [this](const char* path, const lo::Message &msg) {
     info(path, msg);
-    meters();
+    methods();
     refresh();
-  });
-
-  server.add_method("/meters/1", "b", [](lo_arg **argv, int argc) {
-    int size = argv[0]->blob.size;
-    int *data = (int *)&(argv[0]->blob.data);
-    int count = data[0];
-    std::cout << size << ' ' << count << std::endl;
-  });
-
-  server.add_method("/meters/6", "b", [](lo_arg **argv, int argc) {
-    int size = argv[0]->blob.size;
-    int *data = (int *)&(argv[0]->blob.data);
-    int count = data[0];
-    std::cout << size << ' ' << count << std::endl;
   });
 
   client = new lo::Address(host, port);
@@ -62,26 +48,120 @@ void Connection::info(const char *path, const lo::Message &msg)
   state->fx.resize(fxnumber);
   state->ret.resize(retnumber);
   state->channels.resize(ch);
-  int id = 1;
   for (auto &channel : state->channels)
   {
     channel.send.resize(busnumber);
     channel.fx.resize(fxnumber);
+  }
+}
+
+
+void Connection::methods()
+{
+  channelMethods();
+  busMethods();
+  fxMethods();
+  retMethods();
+}
+
+
+void Connection::channelMethods()
+{
+  auto state = State::get();
+  int id = 1;
+  for (auto &channel : state->channels)
+  {
     std::stringstream s;
     s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
     server.add_method(s.str(), "f", [&channel](lo_arg **argv, int argc) {
       channel.fader = argv[0]->f;
     });
     client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
+    server.add_method(s.str(), "i", [&channel](lo_arg **argv, int argc) {
+      channel.mute = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+
     ++id;
   }
 }
 
 
-void Connection::meters()
+void Connection::busMethods()
 {
-  // client->send_from(server, "/meters", "s", "/meters/1");
-  // client->send_from(server, "/meters", "si", "/meters/6", 1);
+  auto state = State::get();
+  int id = 1;
+  for (auto &bus: state->busses)
+  {
+    std::stringstream s;
+    s << "/bus/" << id << "/mix/fader";
+    server.add_method(s.str(), "f", [&bus](lo_arg **argv, int argc) {
+      bus.fader = argv[0]->f;
+    });
+    client->send_from(server, s.str(), "");
+
+    s.str("");
+    s << "/bus/" << id << "/mix/on";
+    server.add_method(s.str(), "i", [&bus](lo_arg **argv, int argc) {
+      bus.mute = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+
+    ++id;
+  }
+}
+
+
+void Connection::fxMethods()
+{
+  auto state = State::get();
+  int id = 1;
+  for (auto &fx: state->fx)
+  {
+    std::stringstream s;
+    s << "/fxsend/" << id << "/mix/fader";
+    server.add_method(s.str(), "f", [&fx](lo_arg **argv, int argc) {
+      fx.fader = argv[0]->f;
+    });
+    client->send_from(server, s.str(), "");
+
+    s.str("");
+    s << "/fxsend/" << id << "/mix/on";
+    server.add_method(s.str(), "i", [&fx](lo_arg **argv, int argc) {
+      fx.mute = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+
+    ++id;
+  }
+}
+
+
+void Connection::retMethods()
+{
+  auto state = State::get();
+  int id = 1;
+  for (auto &ret: state->ret)
+  {
+    std::stringstream s;
+    s << "/rtn/" << id << "/mix/fader";
+    server.add_method(s.str(), "f", [&ret](lo_arg **argv, int argc) {
+      ret.fader = argv[0]->f;
+    });
+    client->send_from(server, s.str(), "");
+
+    s.str("");
+    s << "/rtn/" << id << "/mix/on";
+    server.add_method(s.str(), "i", [&ret](lo_arg **argv, int argc) {
+      ret.mute = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+
+    ++id;
+  }
 }
 
 

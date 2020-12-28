@@ -30,7 +30,7 @@ void FX::draw()
         if (ImGui::VSliderFloat("", state->size.slider, &(fx.fader), 0.0f, 1.0f, "%.2f"))
         {
           std::stringstream s;
-          s << "/bus/" << std::setw(2) << std::setfill('0') << id << "/mix/mlevel";
+          s << "/fxsend/" << id << "/mix/fader";
           client->send(s.str(), "f", fx.fader);
         }
 
@@ -42,7 +42,7 @@ void FX::draw()
         if (ImGui::Button("M", state->size.button))
         {
           std::stringstream s;
-          s << "/bus/" << std::setw(2) << std::setfill('0') << id << "/mix/on";
+          s << "/fxsend/" << id << "/mix/on";
           fx.mute = 1 - fx.mute;
           client->send(s.str(), "i", fx.mute);
         }
@@ -56,7 +56,7 @@ void FX::draw()
         if (ImGui::Button("S", state->size.button))
         {
           std::stringstream s;
-          s << "/-stat/solosw/" << std::setw(2) << std::setfill('0') << id + 45;
+          s << "/-stat/solosw/" << id + 45;
           fx.solo = 1 - fx.solo;
           client->send(s.str(), "i", fx.solo);
         }

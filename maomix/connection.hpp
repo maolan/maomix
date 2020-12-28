@@ -12,8 +12,13 @@ namespace maomix
       ~Connection();
 
       void info(const char *path, const lo::Message &msg);
-      void meters();
       void refresh();
+
+      void methods();
+      void channelMethods();
+      void busMethods();
+      void fxMethods();
+      void retMethods();
 
       lo::ServerThread server;
       lo::Address *client;
