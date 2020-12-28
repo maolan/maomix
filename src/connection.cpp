@@ -25,8 +25,17 @@ Connection::Connection(const lo::string_type &host, const lo::num_string_type &p
   });
 
   server.add_method("/meters/1", "b", [](lo_arg **argv, int argc) {
+    int size = argv[0]->blob.size;
     int *data = (int *)&(argv[0]->blob.data);
-    std::cout << data[0] << ' ' << data[1] << std::endl;
+    int count = data[0];
+    std::cout << size << ' ' << count << std::endl;
+  });
+
+  server.add_method("/meters/6", "b", [](lo_arg **argv, int argc) {
+    int size = argv[0]->blob.size;
+    int *data = (int *)&(argv[0]->blob.data);
+    int count = data[0];
+    std::cout << size << ' ' << count << std::endl;
   });
 
   client = new lo::Address(host, port);
@@ -53,23 +62,32 @@ void Connection::info(const char *path, const lo::Message &msg)
   state->fx.resize(fxnumber);
   state->ret.resize(retnumber);
   state->channels.resize(ch);
+  int id = 1;
   for (auto &channel : state->channels)
   {
     channel.send.resize(busnumber);
     channel.fx.resize(fxnumber);
+    std::stringstream s;
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
+    server.add_method(s.str(), "f", [&channel](lo_arg **argv, int argc) {
+      channel.fader = argv[0]->f;
+    });
+    client->send_from(server, s.str(), "");
+    ++id;
   }
 }
 
 
 void Connection::meters()
 {
-  client->send_from(server, "/meters", "s", "/meters/1");
+  // client->send_from(server, "/meters", "s", "/meters/1");
+  // client->send_from(server, "/meters", "si", "/meters/6", 1);
 }
 
 
 void Connection::refresh()
 {
-  client->send_from(server, "/xremotenfb", "N", nullptr);
+  client->send_from(server, "/xremotenfb", "");
 }
 
 
