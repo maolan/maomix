@@ -84,6 +84,75 @@ void Connection::channelMethods()
       channel.mute = argv[0]->i;
     });
     client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/headamp/" << std::setw(2) << std::setfill('0') << id << "/gain";
+    server.add_method(s.str(), "f", [&channel, &id](lo_arg **argv, int argc) {
+      channel.gain = argv[0]->f;
+    });
+    client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/preamp/invert";
+    server.add_method(s.str(), "i", [&channel](lo_arg **argv, int argc) {
+      channel.invert = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/gate/on";
+    server.add_method(s.str(), "i", [&channel](lo_arg **argv, int argc) {
+      channel.gate.on = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/gate/thr";
+    server.add_method(s.str(), "f", [&channel, &id](lo_arg **argv, int argc) {
+      channel.gate.fader = argv[0]->f;
+    });
+    client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/dyn/on";
+    server.add_method(s.str(), "i", [&channel](lo_arg **argv, int argc) {
+      channel.dyn.on = argv[0]->i;
+    });
+    client->send_from(server, s.str(), "");
+    s.str("");
+
+    s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/dyn/thr";
+    client->send_from(server, s.str(), "");
+    server.add_method(s.str(), "f", [&channel, &id](lo_arg **argv, int argc) {
+      channel.dyn.fader = argv[0]->f;
+    });
+    s.str("");
+
+    int busnumber = 1;
+    for (auto &bus : channel.send)
+    {
+      s.str("");
+      s << "/ch/" << std::setw(2) << std::setfill('0') << id;
+      s << "/mix/" << std::setw(2) << std::setfill('0') << busnumber << "/level";
+      server.add_method(s.str(), "f", [&bus](lo_arg **argv, int argc) {
+        bus = argv[0]->f;
+      });
+      client->send_from(server, s.str(), "");
+      ++busnumber;
+    }
+
+    int fxnumber = 1;
+    for (auto &fx : channel.fx)
+    {
+      s.str("");
+      s << "/ch/" << std::setw(2) << std::setfill('0') << id;
+      s << "/mix/" << std::setw(2) << std::setfill('0') << fxnumber + busnumber - 1 << "/level";
+      server.add_method(s.str(), "f", [&fx](lo_arg **argv, int argc) {
+        fx = argv[0]->f;
+      });
+      client->send_from(server, s.str(), "");
+      ++fxnumber;
+    }
 
     ++id;
   }

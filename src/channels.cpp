@@ -206,7 +206,6 @@ void Channels::detail()
           std::stringstream s;
           s << "/ch/" << std::setw(2) << std::setfill('0') << _detail;
           s << "/mix/" << std::setw(2) << std::setfill('0') << fxnumber + busnumber - 1 << "/level";
-          std::cout << s.str() << " = " << fx << '\n';
           client->send(s.str(), "f", fx);
         }
         ++fxnumber;
