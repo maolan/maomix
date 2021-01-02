@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <sstream>
 #include "imgui.h"
+#include "maomix/meter.hpp"
 #include "maomix/ret.hpp"
 #include "maomix/state.hpp"
 
@@ -27,12 +28,20 @@ void Ret::draw()
         ImGui::Button(s.str().data(), state->size.button);
         ImGui::PopStyleColor();
 
-        if (ImGui::VSliderFloat("", state->size.slider, &(ret.fader), 0.0f, 1.0f, "%.2f"))
+        ImGui::BeginGroup();
         {
+          if (ImGui::VSliderFloat("", state->size.slider, &(ret.fader), 0.0f, 1.0f, "%.2f"))
+          {
+            std::stringstream s;
+            s << "/fxrtn/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
+            client->send(s.str(), "f", ret);
+          }
           std::stringstream s;
-          s << "/fxrtn/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
-          client->send(s.str(), "f", ret);
+          s << "vu" << id;
+          ImGui::SameLine(-0.01);
+          Meter(s.str().data(), state->size.meter, 0.5, 0, 1);
         }
+        ImGui::EndGroup();
 
         bool muted = ret.mute != 0;
         if (muted)

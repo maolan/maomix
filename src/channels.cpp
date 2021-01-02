@@ -85,6 +85,23 @@ void Channels::detail()
     ImGui::SameLine();
     ImGui::BeginGroup();
     {
+      float value = 0.5;
+      std::stringstream s;
+      s << value;
+      ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
+      ImGui::Button(s.str().data(), state->size.button);
+      ImGui::PopStyleColor();
+      Meter("vu", state->size.slider, value, 0, 1);
+    }
+    ImGui::EndGroup();
+
+    ImGui::SameLine();
+    ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+    ImGui::SameLine();
+
+    ImGui::SameLine();
+    ImGui::BeginGroup();
+    {
       ImGui::Text("Gain");
       if (Knob("gain", state->size.knob, &(channel.gain), 0.0f, 1.0f))
       {
@@ -247,8 +264,10 @@ void Channels::list()
             s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
             client->send(s.str(), "f", channel.fader);
           }
+          std::stringstream s;
+          s << "vu" << id;
           ImGui::SameLine(-0.01);
-          Meter("vu", state->size.meter, 0.5, 0, 1);
+          Meter(s.str().data(), state->size.meter, 0.5, 0, 1);
         }
         ImGui::EndGroup();
 

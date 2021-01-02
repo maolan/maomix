@@ -4,6 +4,7 @@
 #include <sstream>
 #include "imgui.h"
 #include "maomix/busses.hpp"
+#include "maomix/meter.hpp"
 #include "maomix/state.hpp"
 
 
@@ -27,12 +28,20 @@ void Busses::draw()
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(ImColor(0, 0, 0)));
         ImGui::Button(s.str().data(), state->size.button);
         ImGui::PopStyleColor();
-        if (ImGui::VSliderFloat("", state->size.slider, &(bus.fader), 0.0f, 1.0f, "%.2f"))
+        ImGui::BeginGroup();
         {
+          if (ImGui::VSliderFloat("", state->size.slider, &(bus.fader), 0.0f, 1.0f, "%.2f"))
+          {
+            std::stringstream s;
+            s << "/bus/" << id << "/mix/fader";
+            client->send(s.str(), "f", bus);
+          }
           std::stringstream s;
-          s << "/bus/" << id << "/mix/fader";
-          client->send(s.str(), "f", bus);
+          s << "vu" << id;
+          ImGui::SameLine(-0.01);
+          Meter(s.str().data(), state->size.meter, 0.5, 0, 1);
         }
+        ImGui::EndGroup();
 
         bool muted = bus.mute != 0;
         if (muted)

@@ -1,6 +1,7 @@
 // Find the apropriate URL
 #include "imgui.h"
 #include "maomix/line.hpp"
+#include "maomix/meter.hpp"
 #include "maomix/state.hpp"
 
 
@@ -15,10 +16,16 @@ void Line::draw()
   bool soloed;
   ImGui::Begin("Line");
   {
-    if (ImGui::VSliderFloat("", state->size.slider, &(state->line.fader), 0.0f, 1.0f, "%.2f"))
+    ImGui::BeginGroup();
     {
-      client->send("/rtn/aux/mix/fader", "f", state->line);
+      if (ImGui::VSliderFloat("", state->size.slider, &(state->line.fader), 0.0f, 1.0f, "%.2f"))
+      {
+        client->send("/rtn/aux/mix/fader", "f", state->line);
+      }
+      ImGui::SameLine(-0.01);
+      Meter("vu", state->size.meter, 0.5, 0, 1);
     }
+    ImGui::EndGroup();
 
     muted = state->line.mute != 0;
     if (muted)

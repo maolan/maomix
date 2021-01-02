@@ -3,6 +3,7 @@
 #include <sstream>
 #include "imgui.h"
 #include "maomix/fx.hpp"
+#include "maomix/meter.hpp"
 #include "maomix/state.hpp"
 
 
@@ -27,12 +28,20 @@ void FX::draw()
         ImGui::Button(s.str().data(), state->size.button);
         ImGui::PopStyleColor();
 
-        if (ImGui::VSliderFloat("", state->size.slider, &(fx.fader), 0.0f, 1.0f, "%.2f"))
+        ImGui::BeginGroup();
         {
+          if (ImGui::VSliderFloat("", state->size.slider, &(fx.fader), 0.0f, 1.0f, "%.2f"))
+          {
+            std::stringstream s;
+            s << "/fxsend/" << id << "/mix/fader";
+            client->send(s.str(), "f", fx.fader);
+          }
           std::stringstream s;
-          s << "/fxsend/" << id << "/mix/fader";
-          client->send(s.str(), "f", fx.fader);
+          s << "vu" << id;
+          ImGui::SameLine(-0.01);
+          Meter(s.str().data(), state->size.meter, 0.5, 0, 1);
         }
+        ImGui::EndGroup();
 
         bool muted = fx.mute != 0;
         if (muted)

@@ -1,6 +1,7 @@
 // https://behringerwiki.musictribe.com/index.php?title=Main_Stereo_(/main/st)_data
 #include "imgui.h"
 #include "maomix/main.hpp"
+#include "maomix/meter.hpp"
 #include "maomix/state.hpp"
 
 
@@ -14,10 +15,17 @@ void Main::draw()
   bool muted;
   ImGui::Begin("Main");
   {
-    if (ImGui::VSliderFloat("", state->size.slider, &(state->output.fader), 0.0f, 1.0f, "%.2f"))
+    ImGui::BeginGroup();
     {
-      client->send("/lr/mix/fader", "f", state->output);
+      if (ImGui::VSliderFloat("", state->size.slider, &(state->output.fader), 0.0f, 1.0f, "%.2f"))
+      {
+        client->send("/lr/mix/fader", "f", state->output);
+      }
+      ImGui::SameLine(-0.01);
+      Meter("vu", state->size.meter, 0.5, 0, 1);
     }
+    ImGui::EndGroup();
+
     muted = state->output.mute != 0;
     if (muted)
     {
