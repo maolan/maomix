@@ -18,6 +18,11 @@ State * State::state = nullptr;
 
 State::State()
   : connection{nullptr}
+  , showBusses{true}
+  , showFx{true}
+  , showRet{true}
+  , showLine{true}
+  , showChannels{true}
 {}
 
 

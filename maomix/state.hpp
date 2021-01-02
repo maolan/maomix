@@ -119,6 +119,11 @@ namespace maomix
       MainState output;
       LineState line;
       Size size;
+      bool showBusses;
+      bool showFx;
+      bool showRet;
+      bool showLine;
+      bool showChannels;
 
     protected:
       State();

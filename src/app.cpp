@@ -11,15 +11,16 @@ const std::string App::title = "MaoMix";
 
 void App::draw()
 {
-  static auto state = State::get();
+  auto state = State::get();
   if (state->connection)
   {
-    busses.draw();
-    fx.draw();
-    ret.draw();
-    line.draw();
+    menu.draw();
+    if (state->showBusses) { busses.draw(); }
+    if (state->showFx) { fx.draw(); }
+    if (state->showRet) { ret.draw(); }
+    if (state->showLine) { line.draw(); }
     main.draw();
-    channels.draw();
+    if (state->showChannels) { channels.draw(); }
   }
   else { discovery.draw(); }
 }

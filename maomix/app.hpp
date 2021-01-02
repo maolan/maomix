@@ -6,6 +6,7 @@
 #include "./fx.hpp"
 #include "./line.hpp"
 #include "./main.hpp"
+#include "./menu.hpp"
 #include "./ret.hpp"
 
 
@@ -24,6 +25,7 @@ namespace maomix
       FX fx;
       Line line;
       Main main;
+      Menu menu;
       Ret ret;
   };
 }
