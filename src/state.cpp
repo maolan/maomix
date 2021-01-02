@@ -6,9 +6,10 @@ using namespace maomix;
 
 
 Size::Size()
-  : slider{35, 160}
-  , button{35, 18}
+  : slider{40, 160}
+  , button{40, 18}
   , knob{18}
+  , meter{3, 160}
 {}
 
 

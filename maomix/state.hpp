@@ -95,6 +95,7 @@ namespace maomix
 
       ImVec2 slider;
       ImVec2 button;
+      ImVec2 meter;
       float knob;
   };
 

@@ -6,6 +6,7 @@
 #include "imgui_internal.h"
 #include "maomix/channels.hpp"
 #include "maomix/knob.hpp"
+#include "maomix/meter.hpp"
 #include "maomix/state.hpp"
 
 
@@ -238,12 +239,18 @@ void Channels::list()
         if (ImGui::Button(s.str().data(), state->size.button)) { _detail = id; }
         ImGui::PopStyleColor();
 
-        if (ImGui::VSliderFloat("", state->size.slider, &(channel.fader), 0.0f, 1.0f, "%.2f"))
+        ImGui::BeginGroup();
         {
-          std::stringstream s;
-          s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
-          client->send(s.str(), "f", channel.fader);
+          if (ImGui::VSliderFloat("", state->size.slider, &(channel.fader), 0.0f, 1.0f, "%.2f"))
+          {
+            std::stringstream s;
+            s << "/ch/" << std::setw(2) << std::setfill('0') << id << "/mix/fader";
+            client->send(s.str(), "f", channel.fader);
+          }
+          ImGui::SameLine(-0.01);
+          Meter("vu", state->size.meter, 0.5, 0, 1);
         }
+        ImGui::EndGroup();
 
         muted = channel.mute != 0;
         if (muted)
