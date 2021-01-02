@@ -19,6 +19,7 @@ namespace maomix
       void busMethods();
       void fxMethods();
       void retMethods();
+      void meters();
 
       lo::ServerThread server;
       lo::Address *client;

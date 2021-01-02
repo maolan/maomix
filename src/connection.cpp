@@ -21,6 +21,7 @@ Connection::Connection(const lo::string_type &host, const lo::num_string_type &p
   server.add_method("/info", "ssss", [this](const char* path, const lo::Message &msg) {
     info(path, msg);
     methods();
+    meters();
     refresh();
   });
 
@@ -237,6 +238,12 @@ void Connection::retMethods()
 void Connection::refresh()
 {
   client->send_from(server, "/xremotenfb", "");
+}
+
+
+void Connection::meters()
+{
+  client->send_from(server, "/meters", "s", "/meters/1");
 }
 
 
