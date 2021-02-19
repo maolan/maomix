@@ -103,7 +103,7 @@ void Channels::detail()
     ImGui::BeginGroup();
     {
       ImGui::Text("Gain");
-      if (Knob("gain", state->size.knob, &(channel.gain), 0.0f, 1.0f))
+      if (Knob("gain", state->size.knob, channel.gain, 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/headamp/" << std::setw(2) << std::setfill('0') << _detail << "/gain";
@@ -163,7 +163,7 @@ void Channels::detail()
         client->send(s.str(), "i", channel.gate.on);
       }
       if (gated) { ImGui::PopStyleColor(); }
-      if (Knob("Gate", state->size.knob, &(channel.gate.fader), 0.0f, 1.0f))
+      if (Knob("Gate", state->size.knob, channel.gate.fader, 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/gate/thr";
@@ -183,7 +183,7 @@ void Channels::detail()
         client->send(s.str(), "i", channel.dyn.on);
       }
       if (dyned) { ImGui::PopStyleColor(); }
-      if (Knob("dyn", state->size.knob, &(channel.dyn.fader), 0.0f, 1.0f))
+      if (Knob("dyn", state->size.knob, channel.dyn.fader, 0.0f, 1.0f))
       {
         std::stringstream s;
         s << "/ch/" << std::setw(2) << std::setfill('0') << _detail << "/dyn/thr";

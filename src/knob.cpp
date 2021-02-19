@@ -9,10 +9,10 @@ static float ANGLE_MIN = 3.141592 * 0.75;
 static float ANGLE_MAX = 3.141592 * 2.25;
 
 
-bool Knob(const char *label, float radius, float* p_value, float v_min, float v_max)
+bool Knob(const char *label, float radius, float &p_value, const float &v_min, const float &v_max)
 {
   std::stringstream s;
-  s << std::fixed << std::setprecision(2) << *p_value;
+  s << std::fixed << std::setprecision(2) << p_value;
   ImGuiIO& io = ImGui::GetIO();
   ImGuiStyle& style = ImGui::GetStyle();
 
@@ -28,13 +28,13 @@ bool Knob(const char *label, float radius, float* p_value, float v_min, float v_
   if (is_active && io.MouseDelta.y != 0.0f)
   {
     float step = (v_max - v_min) / 200.0f;
-    *p_value += (-io.MouseDelta.y) * step;
-    if (*p_value < v_min) *p_value = v_min;
-    if (*p_value > v_max) *p_value = v_max;
+    p_value += (-io.MouseDelta.y) * step;
+    if (p_value < v_min) p_value = v_min;
+    if (p_value > v_max) p_value = v_max;
     value_changed = true;
   }
 
-  float t = (*p_value - v_min) / (v_max - v_min);
+  float t = (p_value - v_min) / (v_max - v_min);
   float angle = ANGLE_MIN + (ANGLE_MAX - ANGLE_MIN) * t;
   float angle_cos = cosf(angle), angle_sin = sinf(angle);
   float radius_inner = radius*0.40f;

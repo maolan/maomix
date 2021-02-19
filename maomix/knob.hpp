@@ -1,1 +1,1 @@
-bool Knob(const char *label, float radius, float* p_value, float v_min, float v_max);
+bool Knob(const char *label, float radius, float &p_value, const float &v_min, const float &v_max);
