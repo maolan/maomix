@@ -3,24 +3,24 @@ project(maomix VERSION 0.0.1 DESCRIPTION "OSC Mixer Written in C++")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+include(GNUInstallDirs)
 
 file(GLOB SRCS src/*.cpp)
 file(GLOB HEADERS maomix/*.hpp)
 install(FILES ${HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include/maomix)
-set(MY_HEADERS ${MY_HEADERS} ${HEADERS})
 set(MY_INCLUDE_DIRS ${MY_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
+set(MY_INCLUDE_DIRS ${MY_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends)
 set(MY_INCLUDE_DIRS ${MY_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/imgui/examples)
-set(MY_INCLUDE_DIRS ${MY_INCLUDE_DIRS} )
-include(GNUInstallDirs)
 
 file(GLOB IMGUI_SRCS
     imgui/imgui.cpp
     imgui/imgui_draw.cpp
+    imgui/imgui_tables.cpp
     imgui/imgui_widgets.cpp
-    imgui/examples/imgui_impl_glfw.cpp
-    imgui/examples/imgui_impl_opengl3.cpp
+    imgui/backends/imgui_impl_glfw.cpp
+    imgui/backends/imgui_impl_opengl3.cpp
     imgui/examples/libs/gl3w/GL/gl3w.c
- )
+)
 enable_testing()
 
 find_package(PkgConfig REQUIRED)
