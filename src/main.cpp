@@ -17,7 +17,7 @@ void Main::draw()
   {
     ImGui::BeginGroup();
     {
-      if (ImGui::VSliderFloat("", state->size.slider, &(state->output.fader), 0.0f, 1.0f, "%.2f"))
+      if (ImGui::VSliderFloat("##", state->size.slider, &(state->output.fader), 0.0f, 1.0f, "%.2f"))
       {
         client->send("/lr/mix/fader", "f", state->output);
       }

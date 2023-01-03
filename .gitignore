@@ -4,3 +4,7 @@ build/
 imgui/
 project.mk
 vars.mk
+
+/imgui-knobs
+/imguiwrap
+/imnodes

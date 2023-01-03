@@ -3,30 +3,17 @@
 
 BIN_DIR=`dirname $0`
 PROJECT_DIR="${BIN_DIR}/.."
-GH_USERNAME="ocornut"
-GH_PROJECT="imgui"
-GH_VERSION="1.81"
-GH_URL="https://github.com/${GH_USERNAME}/${GH_PROJECT}/archive/v${GH_VERSION}.tar.gz"
-TEMP_DIR=`mktemp -d`
-OS=`uname`
-
-case ${OS} in
-  Linux)
-    FETCHCMD="wget ${GH_URL} -O /tmp/imgui.tar.xz"
-    ;;
-  FreeBSD)
-    FETCHCMD="fetch ${GH_URL} -o /tmp/imgui.tar.xz"
-    ;;
-  *)
-    echo "Unsupported OS" >&2
-    exit 1
-esac
-
-trap "/bin/rm -rf ${TEMP_DIR} /tmp/imgui.tar.xz" HUP KILL INT ABRT BUS TERM EXIT
+GH_PROJECTS="kfsone/imguiwrap altschuler/imgui-knobs Nelarius/imnodes"
+OFFLINE=${OFFLINE:="no"}
 
 cd ${PROJECT_DIR}
-if [ ! -d "${GH_PROJECT}" ]; then
-  ${FETCHCMD}
-  tar xfvp "/tmp/${GH_PROJECT}.tar.xz"
-  mv "${GH_PROJECT}-${GH_VERSION}" "${GH_PROJECT}"
-fi
+for project in ${GH_PROJECTS}; do
+  GH_USERNAME=`echo ${project} | cut -f 1 -d '/'`
+  GH_PROJECT=`echo ${project} | cut -f 2 -d '/'`
+  if [ ! -d "${GH_PROJECT}" ]; then
+    git clone --recurse-submodules https://github.com/${project}
+  elif [ "${OFFLINE}" = "no" ]; then
+    git -C "${GH_PROJECT}" pull
+    git -C "${GH_PROJECT}" submodule update --init
+  fi
+done

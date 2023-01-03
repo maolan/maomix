@@ -1,25 +1,76 @@
 #include <iostream>
+#include <imguiwrap.dear.h>
+#include <imgui-knobs.h>
+#include <imnodes.h>
 #include "maomix/app.hpp"
-#include "maomix/glfw/ui.hpp"
-#include <lo/lo_cpp.h>
 
+static float value = 0;
+static const int hardcoded_node_id = 1;
+static const int output_attr_id = 2;
 
-int main()
+static maomix::App *app;
+
+ImGuiWrapperReturnType
+my_render_function()
 {
-  // lo::ServerThread st(10024);
-  // if (!st.is_valid()) {
-      // std::cerr << "Failed creating server thread" << std::endl;
-      // return 1;
-  // }
-  // st.set_callbacks([&st](){printf("Thread init: %p.\n",&st);},
-                   // [](){printf("Thread cleanup.\n");});
-  // std::cout << "URL: " << st.url() << std::endl;
-  // st.add_method(nullptr, nullptr, []{std::cout << "example" << std::endl;});
-  // st.start();
+  bool show_window { true };
+  // dear::Begin("Subwindow", &show_window) && [](){
+    // dear::Text("Hello, world!");
+    // if (ImGuiKnobs::Knob("Volume", &value, -6.0f, 6.0f, 0.1f, "%.1fdB", ImGuiKnobVariant_WiperOnly, 0, ImGuiKnobFlags_NoTitle)) {
+    //   std::cout << "Value: " << value << std::endl;
+    // }
 
-  maomix::UI *display = new maomix::GLFW("MaoMix");
-  auto app = new maomix::App();
-  display->run(app);
-  delete display;
-  return 0;
+    // ImNodes::BeginNodeEditor();
+
+    // ImNodes::BeginNode(hardcoded_node_id);
+    // ImNodes::BeginNodeTitleBar();
+    // ImGui::TextUnformatted("output node");
+    // ImNodes::EndNodeTitleBar();
+    // ImNodes::BeginOutputAttribute(output_attr_id);
+    // // in between Begin|EndAttribute calls, you can call ImGui
+    // // UI functions
+    // ImGui::Text("output pin");
+    // ImNodes::EndOutputAttribute();
+    // ImGui::Dummy(ImVec2(80.0f, 45.0f));
+    // ImNodes::EndNode();
+
+    // ImNodes::BeginNode(hardcoded_node_id + 10);
+    // ImNodes::BeginNodeTitleBar();
+    // ImGui::TextUnformatted("output 2");
+    // ImNodes::EndNodeTitleBar();
+    // ImNodes::BeginInputAttribute(output_attr_id + 10);
+    // // in between Begin|EndAttribute calls, you can call ImGui
+    // // UI functions
+    // ImGui::Text("input pin");
+    // ImNodes::EndOutputAttribute();
+    // ImGui::Dummy(ImVec2(80.0f, 45.0f));
+    // ImNodes::EndNode();
+
+    // ImNodes::Link(100, output_attr_id, output_attr_id + 10);
+
+    // ImNodes::MiniMap();
+    // ImNodes::EndNodeEditor();
+
+  // };
+  app->draw();
+  // Return a concrete value to exit the loop.
+  if (!show_window)
+      return 0;
+  // Return nothing to continue the loop.
+  return {};
+}
+
+int main(int argc, const char** argv)
+{
+  ImGui::CreateContext();
+  ImNodes::CreateContext();
+
+  ImGuiWrapConfig config{};
+  config.windowTitle_ = "MaoMix";
+  app = new maomix::App();
+  auto ret = imgui_main(config, my_render_function);
+
+  ImNodes::DestroyContext();
+  ImGui::DestroyContext();
+  return ret;
 }

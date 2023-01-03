@@ -15,7 +15,7 @@ Connection::Connection(const lo::string_type &host, const lo::num_string_type &p
   if (!server.is_valid()) {
     std::cerr << "Could not create a valid server thread." << std::endl;
   }
-  std::cout << "Listening on " << server.url() << std::endl;
+  std::cerr << "Listening on " << server.url() << std::endl;
   server.start();
 
   server.add_method("/info", "ssss", [this](const char* path, const lo::Message &msg) {
